@@ -1,0 +1,36 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+# Cloudflare Workers build output, the same kind of artifact as .next
+/.open-next/
+.wrangler/
+/out/
+
+# production
+/build
+
+# electron-builder output
+/dist
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Supabase CLI scratch — a version stamp it rewrites on every run.
+supabase/.temp/

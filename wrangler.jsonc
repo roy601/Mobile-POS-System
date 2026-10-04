@@ -1,0 +1,29 @@
+{
+  // Cloudflare Workers deployment for the owner's browser/iPad access.
+  //
+  // The shop's till is NOT this — that stays the Electron desktop app,
+  // built from the same repo with `npm run release`. This is the same
+  // application reached from a browser, so the owner can look at the
+  // figures and make owner-only changes without a laptop.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mobile-pos-demo",
+  "main": ".open-next/worker.js",
+
+  // Set to the date the Worker was first built. Pinning it means a
+  // later change to Workers' own defaults cannot alter how this app
+  // behaves without someone deciding to move it.
+  "compatibility_date": "2026-09-05",
+
+  // Required by the adapter: parts of Next.js reach for Node built-ins,
+  // and without this they fail at runtime rather than at build time.
+  "compatibility_flags": ["nodejs_compat"],
+
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}

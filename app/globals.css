@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Three surface levels, darkest at the back.
+     *
+     *   background  the page          #D6DEE8
+     *   card        raised surfaces   #E4E9F0
+     *   field       what you type in  #FBF8EC  ("whisper cream")
+     *
+     * Darkened a step from #E7ECF3 / #F1F4F9: the shop found the old
+     * screens too white and glaring through a day at the counter. The
+     * field stays the brightest thing on screen, so the place to type
+     * still stands out.
+     *
+     * Everything used to be pure white on pure white, so a 1px border
+     * was the only thing separating a surface from the page behind it.
+     * Now each level is a step brighter than the one behind, and the
+     * brightest thing on any screen is the field the cursor is in.
+     */
+    --background: 214 28% 87%;
+    --foreground: 218 46% 12%;
+    --card: 216 27% 92%;
+    --card-foreground: 218 46% 12%;
+    --popover: 216 30% 94%;
+    --popover-foreground: 218 46% 12%;
+    /* Deep teal. Deliberately not green or red: those already mean
+     * money and trouble, and interaction should not borrow either. */
+    --primary: 177 68% 22%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 25% 85%;
+    --secondary-foreground: 218 46% 12%;
+    --muted: 215 25% 85%;
+    --muted-foreground: 216 19% 36%;
+    --accent: 215 25% 85%;
+    --accent-foreground: 218 46% 12%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 215 22% 79%;
+    /* In shadcn --input is the BORDER of a field, not its fill. The
+     * fill needs its own token, because every input previously took
+     * bg-background and would now turn the colour of the page. */
+    --input: 45 22% 74%;
+    --field: 48 60% 95%;
+    /* A list's rows: white, then the faintest yellow, alternating. */
+    --row: 0 0% 100%;
+    --stripe: 48 100% 96%;
+    --ring: 177 68% 22%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --field: 217 33% 14%;
+    --row: 222 30% 9%;
+    --stripe: 40 18% 12%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* A list whose rows alternate: one white, the next the faintest
+   * yellow, so the eye can follow a line across. Only where a table
+   * body asks for it with class "zebra" -- the Day Cashbook, Income
+   * and Expense records -- not every table in the app.
+   *
+   * :where() gives this no weight, so anything a row sets for itself
+   * still wins: a hover, a highlight, a selected row. */
+  :where(tbody.zebra > tr:nth-child(odd)) {
+    background-color: hsl(var(--row));
+  }
+  :where(tbody.zebra > tr:nth-child(even)) {
+    background-color: hsl(var(--stripe));
+  }
+}
+
+/* ── Main navigation: floating frosted capsule ──────────────────────
+ *
+ * The bar it sits in is transparent and sticky, so page content passes
+ * behind this and is blurred by it. Without the sticky header there is
+ * nothing behind the glass and the effect does not read at all.
+ */
+@layer components {
+  .nav-capsule {
+    background: hsl(var(--card) / 0.55);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: blur(14px) saturate(180%);
+    border: 1px solid hsl(0 0% 100% / 0.75);
+    box-shadow:
+      0 8px 24px -14px hsl(218 46% 12% / 0.45),
+      inset 0 1px 0 hsl(0 0% 100% / 0.6);
+    /* Chromium promotes this anyway to composite the blur; saying so
+     * keeps the pill's transform on the same layer instead of forcing
+     * the backdrop to re-rasterise on every frame of the glide. */
+    will-change: transform;
+    scrollbar-width: none;
+  }
+  .nav-capsule::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-glider {
+    transition:
+      transform 320ms cubic-bezier(0.34, 1.3, 0.64, 1),
+      width 320ms cubic-bezier(0.34, 1.3, 0.64, 1),
+      background-color 200ms ease,
+      box-shadow 200ms ease;
+  }
+  .nav-glider-active {
+    background-image: linear-gradient(
+      135deg,
+      hsl(var(--primary)),
+      hsl(177 62% 32%)
+    );
+    box-shadow:
+      0 2px 8px -2px hsl(var(--primary) / 0.55),
+      inset 0 1px 0 hsl(0 0% 100% / 0.22);
+  }
+  .nav-glider-hover {
+    background-color: hsl(var(--primary) / 0.1);
+  }
+
+  /* A shop PC that cannot composite the blur gets an opaque capsule
+   * rather than a transparent one with text scrolling through it. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .nav-capsule {
+      background: hsl(var(--card));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-glider {
+      transition: none;
+    }
+  }
+}
