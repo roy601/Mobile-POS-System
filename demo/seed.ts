@@ -284,7 +284,8 @@ export function buildSeed(): Record<string, Row[]> {
         // Cheaper handsets sell more often.
         const sorted = [...phones].sort((a, b) => a.product.price - b.product.price)
         const unit = sorted[Math.floor(Math.pow(r(), 1.6) * sorted.length)]
-        const discount = r() < 0.4 ? pick([200, 300, 500]) : 0
+        // Only on handsets with room in the margin for it.
+        const discount = unit.product.price > 10000 && r() < 0.4 ? pick([200, 300, 500]) : 0
         basket.push({ unit, qty: 1, discount })
       }
       const extras = basket.length ? int(0, 2) : int(1, 3)
