@@ -126,7 +126,7 @@ The full version runs on a real database with backups, staff accounts and the
 desktop app. Get in touch for a walkthrough or pricing.
 
 **Apurba Roy**
-mail: apurbor39@gmail.com
+apurbor39@gmail.com
 
 
 ## Licence
